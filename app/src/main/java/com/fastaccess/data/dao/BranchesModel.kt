@@ -1,5 +1,6 @@
 package com.fastaccess.data.dao
 
+import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
 import com.fastaccess.data.entity.Commit
@@ -35,12 +36,17 @@ class BranchesModel : Parcelable {
         dest.writeByte(if (isTag) 1.toByte() else 0.toByte())
     }
 
-    private constructor(`in`: Parcel) {
-        name = `in`.readString()
-        commit = `in`.readParcelable(Commit::class.java.classLoader)
-        protectedBranch = `in`.readByte().toInt() != 0
-        protectionUrl = `in`.readString()
-        isTag = `in`.readByte().toInt() != 0
+    private constructor(parcel: Parcel) {
+        name = parcel.readString()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            commit = parcel.readParcelable(Commit::class.java.classLoader, Commit::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            commit = parcel.readParcelable(Commit::class.java.classLoader)
+        }
+        protectedBranch = parcel.readByte().toInt() != 0
+        protectionUrl = parcel.readString()
+        isTag = parcel.readByte().toInt() != 0
     }
 
     companion object {
