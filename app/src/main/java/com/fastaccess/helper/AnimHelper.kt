@@ -178,13 +178,9 @@ object AnimHelper {
                         animator.duration = duration.toLong()
                         animator.addListener(listenerAdapter)
                         animator.start()
-                    } else {
-                        listenerAdapter.onAnimationEnd(null)
                     }
                 }
             }
-        } else {
-            listenerAdapter.onAnimationEnd(null)
         }
     }
 
